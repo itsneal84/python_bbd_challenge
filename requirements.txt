@@ -1,0 +1,12 @@
+# BDD Testing Framework
+behave>=1.2.6
+
+# Windows UI Automation
+pywinauto>=0.6.8
+
+# Additional utilities
+comtypes>=1.1.14
+pywin32>=305
+
+# Optional: For better reporting
+allure-behave>=2.13.2
