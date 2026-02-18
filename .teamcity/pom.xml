@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>calculator-bdd-teamcity-config</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Windows Calculator BDD Tests - TeamCity Configuration</name>
+    <description>TeamCity Kotlin DSL configuration for Windows Calculator BDD Test Automation</description>
+
+    <properties>
+        <!-- Must match the version = "2023.11" declared in settings.kts -->
+        <teamcity.dsl.version>2023.11</teamcity.dsl.version>
+        <kotlin.version>1.9.21</kotlin.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <!-- JetBrains TeamCity plugin repository -->
+        <repository>
+            <id>jetbrains-all</id>
+            <url>https://download.jetbrains.com/teamcity-repository</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jetbrains-all</id>
+            <url>https://download.jetbrains.com/teamcity-repository</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencies>
+        <!-- TeamCity Kotlin DSL API - version must match settings.kts -->
+        <dependency>
+            <groupId>org.jetbrains.teamcity</groupId>
+            <artifactId>configs-dsl-kotlin-extended</artifactId>
+            <version>${teamcity.dsl.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Kotlin standard library -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <sourceDirectory>${project.basedir}/.teamcity</sourceDirectory>
+
+        <plugins>
+            <!-- TeamCity configs generation plugin -->
+            <plugin>
+                <groupId>org.jetbrains.teamcity</groupId>
+                <artifactId>teamcity-configs-maven-plugin</artifactId>
+                <version>${teamcity.dsl.version}</version>
+                <configuration>
+                    <format>kotlin</format>
+                    <dstDir>target/generated-configs</dstDir>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-teamcity-configs</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Kotlin Maven plugin for compiling .kts scripts -->
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>script</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scriptTemplates>
+                        <scriptTemplate>jetbrains.buildServer.configs.kotlin.ScriptTemplates</scriptTemplate>
+                    </scriptTemplates>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
